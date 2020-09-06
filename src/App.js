@@ -1,26 +1,47 @@
 import React from 'react';
-import logo from './logo.svg';
+
+import Navigation from './Components/navigation/navigation';
+import ViewUsersPage from './pages/view-users-page/view-users-page.component';
+import SignIn from './Components/signin/signin.components';
+import AddUsers from './Components/add-users/add-users.component';
+
 import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends React.Component {
+  constructor(){
+    super();
+
+    this.state = {
+      route: 'home',
+      isSignedIn: false
+    }
+  }
+
+  onRouteChange = (route) => {
+    if (route === 'view-users-page'){
+      this.setState({isSignedIn: true})
+    } else if (route === 'home'){
+      this.setState({isSignedIn: false})
+    }
+    this.setState({route: route})
+  }
+
+  render(){
+    return (
+      <div className="App">
+        <Navigation isSignedIn = {this.state.isSignedIn} onRouteChange = {this.onRouteChange} />
+        { this.state.route === 'home'
+          ?<SignIn onRouteChange = {this.onRouteChange}/>
+          : (
+              this.state.route === 'view-users-page'
+              ? <ViewUsersPage/>
+              :
+              <AddUsers onRouteChange = {this.onRouteChange}/>
+            )
+        }
+      </div>
+    );
+  }
 }
 
 export default App;
